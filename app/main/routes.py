@@ -2,7 +2,6 @@ from datetime import datetime
 
 from flask import render_template, Blueprint, request, flash, redirect, url_for, make_response
 from sqlalchemy import or_
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import with_polymorphic
 
 from app import db
