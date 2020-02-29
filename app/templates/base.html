@@ -14,10 +14,17 @@
             <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign up</a>
+            <a class="nav-link" href="{{ url_for('auth.signup') }}">My Account</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('main.courses') }}">Courses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.wallet') }}">Wallet</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.schedule_a_lesson') }}">Schedule a Lesson</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.lessons') }}">Lessons</a>
         </li>
         {% if current_user.is_anonymous %}
         <li class="nav-item">
