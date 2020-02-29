@@ -4,8 +4,8 @@ from sqlalchemy.orm import with_polymorphic
 from wtforms import SelectField, StringField, PasswordField, ValidationError, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
-from app import db
-from app.models import User, Student, Teacher
+from langbridge import db
+from langbridge.models import User, Student, Teacher
 
 
 class SignupForm(FlaskForm):

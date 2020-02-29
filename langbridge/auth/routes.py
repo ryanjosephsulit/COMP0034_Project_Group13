@@ -5,14 +5,14 @@ from flask import render_template, Blueprint, request, flash, redirect, url_for,
 from flask_login import login_user, login_required, logout_user
 from sqlalchemy.exc import IntegrityError
 
-from app import db, login_manager
-from app.auth.forms import SignupForm, LoginForm
-from app.models import Student, Teacher, User
+from langbridge import db, login_manager
+from langbridge.auth.forms import SignupForm, LoginForm
+from langbridge.models import Student, Teacher, User
 
 from sqlalchemy import or_
 from sqlalchemy.orm import with_polymorphic
 
-from app import db
+from langbridge import db
 
 bp_auth = Blueprint('auth', __name__)
 

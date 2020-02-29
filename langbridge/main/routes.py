@@ -4,8 +4,9 @@ from flask import render_template, Blueprint, request, flash, redirect, url_for,
 from sqlalchemy import or_
 from sqlalchemy.orm import with_polymorphic
 
-from app import db
-from app.models import Course, Student, Teacher, User
+from langbridge import db
+from langbridge.models import Teacher, User, BankAccount, Wallet, Language, LanguageUser, Lesson, LessonReview
+
 
 bp_main = Blueprint('main', __name__)
 
@@ -19,7 +20,7 @@ def index(name=""):
 
 @bp_main.route('/courses', methods=['GET'])
 def courses():
-    courses = Course.query.join(Teacher).with_entities(Course.course_code, Course.name,
+    courses = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
                                                        Teacher.name.label('teacher_name')).all()
     return render_template("courses.html", courses=courses)
 
