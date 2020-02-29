@@ -1,21 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Courses{% endblock %}
+{% block title %}Language{% endblock %}
 {% block content %}
 {% if courses|length %}
 <table class="table">
     <thead class="thead-dark">
     <tr>
         <th scope="col">Code</th>
-        <th scope="col">Course Name</th>
+        <th scope="col">Language Name</th>
         <th scope="col">Teacher</th>
     </tr>
     </thead>
     <tbody>
-    {% for course in courses %}
+    {% for language in Language %}
     <tr>
-        <td>{{ course.course_code }}</td>
-        <td>{{ course.name }}</td>
-        <td>{{ course.teacher_name }}</td>
+        <td>{{ language.lang_id }}</td>
+        <td>{{ language.name }}</td>
+        <td>{{ language.user_name }}</td>
     </tr>
     {% endfor %}
     </tbody>

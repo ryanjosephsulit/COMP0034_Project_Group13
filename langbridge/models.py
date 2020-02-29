@@ -30,10 +30,11 @@ class User(db.Model):
 class Teacher(User):
     __tablename__ = 'teacher'
     teacher_id = db.Column(None, db.ForeignKey('user.user_id'), primary_key=True)
+    title = db.Column(db.Text)
     rating = db.Column(db.Integer, nullable=False)
     reviews = db.Column(db.String)
 
-    __mapper_args__ = {"polymorphic_identity": "learner"}
+    __mapper_args__ = {"polymorphic_identity": "teacher"}
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
@@ -79,7 +80,7 @@ class LessonReview(db.Model):
 class Language(db.Model):
     __tablename__ = 'language'
     lang_id = db.Column(db.Integer, primary_key=True)
-    language = db.Column(db.String)
+    name = db.Column(db.String)
 
 
 class LanguageUser(db.Model):

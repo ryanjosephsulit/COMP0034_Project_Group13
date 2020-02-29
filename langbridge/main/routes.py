@@ -18,11 +18,11 @@ def index(name=""):
     return render_template('index.html', name=name)
 
 
-@bp_main.route('/courses', methods=['GET'])
-def courses():
-    courses = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
-                                                       Teacher.name.label('teacher_name')).all()
-    return render_template("courses.html", courses=courses)
+@bp_main.route('/languages', methods=['GET'])
+def language():
+    language = Language.query.join(User).with_entities(Language.lang_id, Language.name,
+                                                       User.name.label('user_name')).all()
+    return render_template("languages.html", language=language)
 
 
 
