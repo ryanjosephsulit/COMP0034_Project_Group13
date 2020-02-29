@@ -35,10 +35,10 @@ def get_safe_redirect():
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(id):
     """Check if user is logged-in on every page load."""
-    if user_id is not None:
-        return User.query.get(user_id)
+    if id is not None:
+        return User.query.get(id)
     return None
 
 
@@ -96,9 +96,9 @@ def search():
         if term == "":
             flash("Enter a name to search for")
             return redirect('/')
-        users = with_polymorphic(User, [User, Teacher])
+        users = with_polymorphic(User, [Teacher])
         results = db.session.query(users).filter(
-            or_(users.User.name.contains(term), users.Teacher.name.contains(term))).all()
+            or_(users.name.contains(term), users.Teacher.name.contains(term))).all()
         # results = Student.query.filter(Student.email.contains(term)).all()
         if not results:
             flash("No users found with that name.")

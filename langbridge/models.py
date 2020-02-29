@@ -6,11 +6,12 @@ from datetime import datetime
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
     user_type = db.Column(db.String(10), nullable=False)
+    #languages = db.relationship('Language', backref='Users')
 
     __mapper_args__ = {
         "polymorphic_identity": "user",
@@ -29,7 +30,7 @@ class User(UserMixin, db.Model):
 
 class Teacher(User):
     __tablename__ = 'teacher'
-    teacher_id = db.Column(None, db.ForeignKey('user.user_id'), primary_key=True)
+    teacher_id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)
     title = db.Column(db.Text)
     rating = db.Column(db.Integer, nullable=False)
     reviews = db.Column(db.String)
@@ -42,7 +43,7 @@ class Teacher(User):
 
 class BankAccount(db.Model):
     __tablename__ = 'bank_account'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     payment_type = db.Column(db.String(250), nullable=False)
     payment_details = db.Column(db.String(250), nullable=False)
 
@@ -54,14 +55,14 @@ class BankAccount(db.Model):
 class Wallet(db.Model):
     __tablename__ = 'wallet'
     wallet_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    id = db.Column(db.Integer, db.ForeignKey('user.id'))
     balance = db.Column(db.Integer)
 
 
 class Lesson(db.Model):
     __tablename__ = 'lesson'
     lesson_id = db.Column(db.Integer, primary_key=True)
-    learner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    learner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.teacher_id'))
     aim = db.Column(db.String)
     format = db.Column(db.String)
@@ -71,7 +72,7 @@ class Lesson(db.Model):
 class LessonReview(db.Model):
     __tablename__ = 'lesson_review'
     review_id = db.Column(db.Integer, primary_key=True)
-    learner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    learner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     rating = db.Column(db.Integer)
     comment = db.Column(db.String)
     reviewed_on = db.Column(db.String)
@@ -86,4 +87,4 @@ class Language(db.Model):
 class LanguageUser(db.Model):
     __tablename__ = 'language_user'
     lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
