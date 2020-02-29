@@ -112,7 +112,7 @@ def search():
 @login_required
 def schedule_a_lesson():
 
-    return render_template("schedule_a_lesson.html", courses=courses)
+    return render_template("schedule_a_lesson.html")
 
 
 
@@ -120,14 +120,14 @@ def schedule_a_lesson():
 @login_required
 def lessons():
 
-    return render_template("lessons.html", courses=courses)
+    return render_template("lessons.html")
 
 
 @bp_auth.route('/wallet', methods=['GET'])
 @login_required
 def wallet():
 
-    return render_template("wallet.html", courses=courses)
+    return render_template("wallet.html")
 
 
 
