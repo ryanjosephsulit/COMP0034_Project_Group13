@@ -1,10 +1,10 @@
 from flask_bcrypt import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin
 from langbridge import db
 from datetime import datetime
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "user"
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
