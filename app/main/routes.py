@@ -24,24 +24,6 @@ def courses():
     return render_template("courses.html", courses=courses)
 
 
-@bp_main.route('/schedule_a_lesson', methods=['GET'])
-def schedule_a_lesson():
-
-    return render_template("schedule_a_lesson.html", courses=courses)
-
-
-@bp_main.route('/lessons', methods=['GET'])
-def lessons():
-
-    return render_template("lessons.html", courses=courses)
-
-
-@bp_main.route('/wallet', methods=['GET'])
-def wallet():
-
-    return render_template("wallet.html", courses=courses)
-
-
 @bp_main.route('/delete_cookie')
 def delete_cookie():
     response = make_response(redirect(url_for('main.index')))
