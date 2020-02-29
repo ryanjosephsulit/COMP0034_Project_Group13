@@ -90,6 +90,7 @@ def login():
 
 
 @bp_auth.route('/search', methods=['POST', 'GET'])
+@login_required
 def search():
     if request.method == 'POST':
         term = request.form['search_term']
