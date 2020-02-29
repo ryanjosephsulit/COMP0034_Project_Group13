@@ -24,24 +24,6 @@ def courses():
     return render_template("courses.html", courses=courses)
 
 
-@bp_main.route('/search', methods=['POST', 'GET'])
-def search():
-    if request.method == 'POST':
-        term = request.form['search_term']
-        if term == "":
-            flash("Enter a name to search for")
-            return redirect('/')
-        users = with_polymorphic(User, [Student, Teacher])
-        results = db.session.query(users).filter(
-            or_(users.Student.name.contains(term), users.Teacher.name.contains(term))).all()
-        # results = Student.query.filter(Student.email.contains(term)).all()
-        if not results:
-            flash("No students found with that name.")
-            return redirect('/')
-        return render_template('search_results.html', results=results)
-    else:
-        return redirect(url_for('main.index'))
-
 
 @bp_main.route('/delete_cookie')
 def delete_cookie():

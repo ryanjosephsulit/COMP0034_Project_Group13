@@ -9,6 +9,11 @@ from app import db, login_manager
 from app.auth.forms import SignupForm, LoginForm
 from app.models import Student, Teacher, User
 
+from sqlalchemy import or_
+from sqlalchemy.orm import with_polymorphic
+
+from app import db
+
 bp_auth = Blueprint('auth', __name__)
 
 
@@ -82,6 +87,25 @@ def login():
             return abort(400)
         return redirect(next or url_for('main.index'))
     return render_template('login.html', form=form)
+
+
+@bp_auth.route('/search', methods=['POST', 'GET'])
+def search():
+    if request.method == 'POST':
+        term = request.form['search_term']
+        if term == "":
+            flash("Enter a name to search for")
+            return redirect('/')
+        users = with_polymorphic(User, [Student, Teacher])
+        results = db.session.query(users).filter(
+            or_(users.Student.name.contains(term), users.Teacher.name.contains(term))).all()
+        # results = Student.query.filter(Student.email.contains(term)).all()
+        if not results:
+            flash("No students found with that name.")
+            return redirect('/')
+        return render_template('search_results.html', results=results)
+    else:
+        return redirect(url_for('main.index'))
 
 
 @bp_auth.route('/logout')
