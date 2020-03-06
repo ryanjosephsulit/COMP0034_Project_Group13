@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} Signup {% endblock %}
+{% block content %}
+    <h1>Wallet Page{{ name }}</h1>
+    <h5>LangCoin balance, buy langcoins function, sell langcoins function, view exchange rates</h5>
+
+    {# Purchase LangCoin PayPal Code #}
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="NZMJ8W8ABF39L">
+    <input type="image" src="https://dabuttonfactory.com/button.png?t=Buy+LangCoin+with+PayPal&f=Calibri-Bold&ts=24&tc=fff&tshs=1&tshc=000&hp=20&vp=8&c=5&bgt=gradient&bgc=c00&ebgc=900" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+    </form>
+
+
+
+{% endblock %}
