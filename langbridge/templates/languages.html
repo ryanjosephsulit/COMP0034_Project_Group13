@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Language{% endblock %}
 {% block content %}
-{% if courses|length %}
+{% if language|length %}
 <table class="table">
     <thead class="thead-dark">
     <tr>
@@ -9,6 +9,7 @@
         <th scope="col">Language Name</th>
     </tr>
     </thead>
+
     <tbody>
     {% for language in languages %}
     <tr>
@@ -19,6 +20,6 @@
     </tbody>
 </table>
 {% else %}
-<p>Sorry, no courses are available at this time</p>
+<p>Sorry, no courses are available at this time. </p>
 {% endif %}
 {% endblock %}
