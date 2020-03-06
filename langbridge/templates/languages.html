@@ -1,24 +1,24 @@
-{% extends "base.html" %}
-{% block title %}Language{% endblock %}
-{% block content %}
-{% if courses|length %}
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
+{% extends "base.html" %}
+{% block title %}Language{% endblock %}
+{% block content %}
+{% if courses|length %}
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
         <th scope="col">Code</th>
         <th scope="col">Language Name</th>
     </tr>
     </thead>
-    <tbody>
-    {% for language in Language %}
-    <tr>
+    <tbody>
+    {% for language in Language %}
+    <tr>
         <td>{{ language.lang_id }}</td>
         <td>{{ language.name }}</td>
     </tr>
-    {% endfor %}
+    {% endfor %}
     </tbody>
-</table>
-{% else %}
-<p>Sorry, no courses are available at this time</p>
-{% endif %}
+</table>
+{% else %}
+<p>Sorry, no courses are available at this time</p>
+{% endif %}
 {% endblock %}
