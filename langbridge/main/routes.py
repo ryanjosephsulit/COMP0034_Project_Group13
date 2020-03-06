@@ -20,11 +20,9 @@ def index(name=""):
 
 @bp_main.route('/languages', methods=['GET'])
 def language():
-    language = Language.query.join(User).with_entities(language.lang_id, language.name,
+    languages = LanguageUser.query.join(User).with_entities(Language.lang_id, Language.name,
                                                        User.name.label('user_name')).all()
-#    language = Language.query.join(User, (User.name.label('user_name'))).join(language,
-#                (language.lang_id) & (language.name)).all()
-    return render_template("languages.html", language=language)
+    return render_template("languages.html", language=languages)
 
 @bp_main.route('/delete_cookie')
 def delete_cookie():

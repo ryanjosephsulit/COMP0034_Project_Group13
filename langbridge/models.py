@@ -11,7 +11,6 @@ class User(UserMixin, db.Model):
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
     user_type = db.Column(db.String(10), nullable=False)
-    #languages = db.relationship('Language', backref='Users')
 
     __mapper_args__ = {
         "polymorphic_identity": "user",
@@ -34,6 +33,8 @@ class Teacher(User):
     title = db.Column(db.Text)
     rating = db.Column(db.Integer, nullable=False)
     reviews = db.Column(db.String)
+    users = db.relationship('User', backref='teachers')
+
 
     __mapper_args__ = {"polymorphic_identity": "teacher"}
 
@@ -46,7 +47,7 @@ class BankAccount(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     payment_type = db.Column(db.String(250), nullable=False)
     payment_details = db.Column(db.String(250), nullable=False)
-
+    users = db.relationship('User', backref='bankAccounts')
 
     def __repr__(self):
         return f"Forecast('{self.forecast}', '{self.comment}')"
@@ -57,6 +58,7 @@ class Wallet(db.Model):
     wallet_id = db.Column(db.Integer, primary_key=True)
     id = db.Column(db.Integer, db.ForeignKey('user.id'))
     balance = db.Column(db.Integer)
+    users = db.relationship('User', backref='wallets')
 
 
 class Lesson(db.Model):
@@ -67,7 +69,7 @@ class Lesson(db.Model):
     aim = db.Column(db.String)
     format = db.Column(db.String)
     time = db.Column(db.String)
-
+    users = db.relationship('User', backref='lessons')
 
 class LessonReview(db.Model):
     __tablename__ = 'lesson_review'
@@ -76,6 +78,7 @@ class LessonReview(db.Model):
     rating = db.Column(db.Integer)
     comment = db.Column(db.String)
     reviewed_on = db.Column(db.String)
+    users = db.relationship('User', backref='lessonReviews')
 
 
 class Language(db.Model):
@@ -88,3 +91,5 @@ class LanguageUser(db.Model):
     __tablename__ = 'language_user'
     lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    languages = db.relationship('Language', backref='languageusers')
+    users = db.relationship('User', backref='languageusers')
