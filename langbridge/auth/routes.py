@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from langbridge import db, login_manager
 from langbridge.auth.forms import SignupForm, LoginForm
-from langbridge.models import Teacher, User, BankAccount, Wallet, Language, LanguageUser, Lesson, LessonReview
+from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 from sqlalchemy import or_
 from sqlalchemy.orm import with_polymorphic
@@ -54,9 +54,9 @@ def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         if form.role.data == "learner":
-            user = User(name=form.name.data, email=form.email.data)
+            user = User(name=form.name.data, email=form.email.data, lang_id=form.language.data)
         else:
-            user = Teacher(name=form.name.data, title=form.title.data, email=form.email.data)
+            user = Teacher(name=form.name.data, title=form.title.data, email=form.email.data, lang_id=form.language.data)
         user.set_password(form.password.data)
         try:
             db.session.add(user)

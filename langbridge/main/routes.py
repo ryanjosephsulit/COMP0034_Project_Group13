@@ -5,7 +5,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm import with_polymorphic
 
 from langbridge import db
-from langbridge.models import Teacher, User, BankAccount, Wallet, Language, LanguageUser, Lesson, LessonReview
+from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 
 bp_main = Blueprint('main', __name__)
@@ -20,8 +20,12 @@ def index(name=""):
 
 @bp_main.route('/languages', methods=['GET'])
 def language():
-    languages = LanguageUser.query.join(User).with_entities(Language.lang_id, Language.name,
-                                                       User.name.label('user_name')).all()
+    languages = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
+                                                       Teacher.name.label('user_name')).all()
+    print("HERE")
+    # Simple test to see if languages is populated
+    print(languages)
+
     return render_template("languages.html", language=languages)
 
 @bp_main.route('/delete_cookie')

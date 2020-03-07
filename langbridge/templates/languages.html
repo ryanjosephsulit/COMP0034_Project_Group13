@@ -5,16 +5,15 @@
 <table class="table">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Code</th>
         <th scope="col">Language Name</th>
+        <th scope="col">Teacher Name</th>
     </tr>
     </thead>
-
     <tbody>
-    {% for language in languages %}
+    {% for lang in language %}
     <tr>
-        <td>{{ language.lang_id }}</td>
-        <td>{{ language.name }}</td>
+        <td>{{ lang.name }}</td>
+        <td>{{ lang.user_name }}</td>
     </tr>
     {% endfor %}
     </tbody>

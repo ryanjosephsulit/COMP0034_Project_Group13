@@ -11,6 +11,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
     user_type = db.Column(db.String(10), nullable=False)
+    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), nullable=False)
+    languages = db.relationship('Language', backref='Users')
 
     __mapper_args__ = {
         "polymorphic_identity": "user",
@@ -86,10 +88,9 @@ class Language(db.Model):
     lang_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-
-class LanguageUser(db.Model):
-    __tablename__ = 'language_user'
-    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    languages = db.relationship('Language', backref='languageusers')
-    users = db.relationship('User', backref='languageusers')
+#class LanguageUser(db.Model):
+#    _tablename_ = 'language_user'
+#    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
+#    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+#    languages = db.relationship('Language', backref='languageusers')
+#    users = db.relationship('User', backref='languageusers')

@@ -5,14 +5,14 @@ from wtforms import SelectField, StringField, PasswordField, ValidationError, Bo
 from wtforms.validators import DataRequired, Email, EqualTo
 
 from langbridge import db
-from langbridge.models import Teacher, User, BankAccount, Wallet, Language, LanguageUser, Lesson, LessonReview
+from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 
 class SignupForm(FlaskForm):
     title = SelectField('Title', choices=[('mr', 'Mr'), ('mrs', 'Mrs'), ('dr', 'Dr'), ('prof', 'Prof')])
     name = StringField('Name', validators=[DataRequired()])
     role = SelectField('Role', choices=[('learner', 'Learner'), ('teacher', 'Teacher')])
-    language = SelectField('Language', choices=[('mandarin', 'Mandarin'), ('english', 'English'), ('spanish', 'Spanish')])
+    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
     email = StringField('Email address', validators=[DataRequired(), Email(message='Valid email address required')])
     password = PasswordField('Password',
                              validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
