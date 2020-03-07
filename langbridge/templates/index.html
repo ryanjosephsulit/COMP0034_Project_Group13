@@ -1,8 +1,37 @@
 {# Inherit a parent template called base.html #}
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {# Add the title for this page #}
 {% block title %}Home{% endblock %}
 {# Add the content for this page #}
 {% block content %}
-    <h1>Welcome {{ name }}</h1>
+    <br>
+    <div class="container-fluid" style="background-color: #ed969e">
+        <div class="row">
+            <div class="col-sm-3 col-md-6" align="center">
+                <img src="../static/img/langbridge_logo.png" alt="LangBridge" height="600"  width="550" >
+            </div>
+            <div class="col-sm-9 col-md-6">
+                <div class="container-fluid" style="background-color: #ed969e">
+                    {% from "_formhelpers.html" import render_field %}
+                <form method=post novalidate>
+                    {{ form.csrf_token }}
+                    <dl>
+                        {{ render_field(form.title, class='form-control') }}
+                        {{ render_field(form.name, class='form-control') }}
+                        {{ render_field(form.role, class='form-control') }}
+                        {{ render_field(form.language, class='form-control') }}
+                        {{ render_field(form.email, class='form-control') }}
+                        {{ render_field(form.password, class='form-control') }}
+                        {{ render_field(form.confirm, class='form-control') }}
+                    </dl>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}
