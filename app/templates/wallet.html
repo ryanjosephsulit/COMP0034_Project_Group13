@@ -1,17 +1,43 @@
 {% extends "base.html" %}
 {% block title %} Signup {% endblock %}
 {% block content %}
-    <h1>Wallet Page{{ name }}</h1>
-    <h5>LangCoin balance, buy langcoins function, sell langcoins function, view exchange rates</h5>
 
-    {# Purchase LangCoin PayPal Code #}
+    <h1>Wallet Page{{ name }}</h1>
+    <h2>LangCoin Balance: {{ wallet_balance }} LGC</h2>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="/wallet" method="post" target="_top">
+                <h3 class="text-center">Buy LangCoins</h3>
+                <input type="number" step="0.01" min="0.01" class="form-control" name="buyamount" placeholder="0 LGC"/>
+                <label class="mt-3">Pay with: </label>
+                <select class="form-control">
+                    <option>User Card Details</option>
+                </select>
+                <a href="/payment_details">+ Add Card</a>
+                <div><input type="submit" onclick = "return confirm('Are you sure you want to make this transaction?')"value="Buy LangCoins" class="mt-2 btn btn-danger btn-lg"/></div>
+
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <form action="/wallet" method="post" target="_top">
+                <h3 class="text-center">Sell LangCoins</h3>
+                <input type="number" step="0.01" min="0.01" class="form-control" name="sellamount" placeholder="0 LGC" />
+                <label class="mt-3">Deposit to: </label>
+                <select class="form-control">
+                    <option>User Card Details</option>
+                </select>
+                    <a href="/payment_details">+ Add Card</a>
+                <div><input type="submit" onclick = "return confirm('Are you sure you want to make this transaction?')" value="Sell LangCoins" class="mt-2 btn btn-danger btn-lg"></input></div>
+            </form>
+        </div>
+    </div>
+
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
     <input type="hidden" name="cmd" value="_s-xclick">
     <input type="hidden" name="hosted_button_id" value="NZMJ8W8ABF39L">
-    <input type="image" src="https://dabuttonfactory.com/button.png?t=Buy+LangCoin+with+PayPal&f=Calibri-Bold&ts=24&tc=fff&tshs=1&tshc=000&hp=20&vp=8&c=5&bgt=gradient&bgc=c00&ebgc=900" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-    </form>
-
+    <input type="submit" src="https://dabuttonfactory.com/button.png?t=Buy+LangCoin+with+PayPal&f=Calibri-Bold&ts=24&tc=fff&tshs=1&tshc=000&hp=20&vp=8&c=5&bgt=gradient&bgc=c00&ebgc=900" value="Buy LangCoins with PayPal" class="mt-2 btn btn-primary btn-sm" alt="PayPal – The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1"
 
 
 {% endblock %}

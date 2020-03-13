@@ -5,26 +5,26 @@ from wtforms import SelectField, StringField, PasswordField, ValidationError, Bo
 from wtforms.validators import DataRequired, Email, EqualTo
 
 from app import db
-from app.models import User, Student, Teacher
+from app.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 
 class SignupForm(FlaskForm):
     title = SelectField('Title', choices=[('mr', 'Mr'), ('mrs', 'Mrs'), ('dr', 'Dr'), ('prof', 'Prof')])
     name = StringField('Name', validators=[DataRequired()])
-    role = SelectField('Role', choices=[('student', 'Student'), ('teacher', 'Teacher')])
-    uni_id = StringField('University ID number', validators=[DataRequired(message="University ID number required")])
+    role = SelectField('Role', choices=[('learner', 'Learner'), ('teacher', 'Teacher')])
+    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
     email = StringField('Email address', validators=[DataRequired(), Email(message='Valid email address required')])
     password = PasswordField('Password',
                              validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Repeat Password')
 
-    def validate_uni_id(self, uni_id):
-        users = with_polymorphic(User, [Student, Teacher])
+    def validate_email(self, email):
+        users = with_polymorphic(User, [Teacher])
         results = db.session.query(users).filter(
-            or_((users.Student.student_ref == uni_id.data), (users.Teacher.teacher_ref == uni_id.data))).first()
+            or_((users.email == email.data))).first()
         # student = Student.query.filter_by(student_ref=id_value.data).first()
         if results is not None:
-            raise ValidationError('An account is already registered for that university ID')
+            raise ValidationError('An account is already registered for that email address')
 
 
 class LoginForm(FlaskForm):

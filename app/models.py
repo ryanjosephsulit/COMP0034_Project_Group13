@@ -1,7 +1,7 @@
+from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-
 from app import db
+from datetime import datetime
 
 
 class User(UserMixin, db.Model):
@@ -11,6 +11,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
     user_type = db.Column(db.String(10), nullable=False)
+    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), nullable=False)
+    languages = db.relationship('Language', backref='Users')
 
     __mapper_args__ = {
         "polymorphic_identity": "user",
@@ -27,46 +29,68 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password, password)
 
 
-class Student(User):
-    __tablename__ = 'student'
-    id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)
-    student_ref = db.Column(db.Integer)
-    grades = db.relationship('Grade', backref='students')
-
-    __mapper_args__ = {"polymorphic_identity": "student"}
-
-    def __repr__(self):
-        return '<Student ID: {}, name: {}>'.format(self.student_ref, self.name)
-
-
 class Teacher(User):
     __tablename__ = 'teacher'
-    id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)
-    teacher_ref = db.Column(db.Text, nullable=False)
+    teacher_id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)
     title = db.Column(db.Text)
-    courses = db.relationship('Course', backref='teachers')
+    rating = db.Column(db.Integer, nullable=False)
+    reviews = db.Column(db.String)
+    users = db.relationship('User', backref='teachers')
+
 
     __mapper_args__ = {"polymorphic_identity": "teacher"}
 
     def __repr__(self):
-        return '<Teacher {} {}>'.format(self.teacher_ref, self.title, self.name)
+        return f"User('{self.username}', '{self.email}')"
 
 
-class Course(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    course_code = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.Text, nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey(Teacher.id), nullable=False)
-    grades = db.relationship('Grade', backref='courses')
-
-    def __repr__(self):
-        return '<Course {}>'.format(self.code, self.name)
-
-
-class Grade(db.Model):
-    student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey(Course.id), nullable=False, primary_key=True)
-    grade = db.Column(db.Text)
+class BankAccount(db.Model):
+    __tablename__ = 'bank_account'
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    payment_type = db.Column(db.String(250), nullable=False)
+    credit_card_num = db.Column(db.Integer)
+    users = db.relationship('User', backref='bankAccounts')
 
     def __repr__(self):
-        return '<Grade {}>'.format(self.grade)
+        return f"Forecast('{self.forecast}', '{self.comment}')"
+
+
+class Wallet(db.Model):
+    __tablename__ = 'wallet'
+    wallet_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    balance = db.Column(db.Integer)
+    users = db.relationship('User', backref='wallets')
+
+
+class Lesson(db.Model):
+    __tablename__ = 'lesson'
+    lesson_id = db.Column(db.Integer, primary_key=True)
+    learner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.teacher_id'))
+    aim = db.Column(db.String)
+    format = db.Column(db.String)
+    time = db.Column(db.String)
+    users = db.relationship('User', backref='lessons')
+
+class LessonReview(db.Model):
+    __tablename__ = 'lesson_review'
+    review_id = db.Column(db.Integer, primary_key=True)
+    learner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    rating = db.Column(db.Integer)
+    comment = db.Column(db.String)
+    reviewed_on = db.Column(db.String)
+    users = db.relationship('User', backref='lessonReviews')
+
+
+class Language(db.Model):
+    __tablename__ = 'language'
+    lang_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+#class LanguageUser(db.Model):
+#    _tablename_ = 'language_user'
+#    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
+#    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+#    languages = db.relationship('Language', backref='languageusers')
+#    users = db.relationship('User', backref='languageusers')

@@ -33,7 +33,7 @@ def create_app(config_class=DevConfig):
     login_manager.init_app(app)
 
     from populate_db import populate_db
-    from app.models import Teacher, Student, Course, Grade
+    from app.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
     with app.app_context():
         db.create_all()
         populate_db()
