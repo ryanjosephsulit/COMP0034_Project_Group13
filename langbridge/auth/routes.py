@@ -41,13 +41,11 @@ def load_user(id):
         return User.query.get(id)
     return None
 
-
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
-
 
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
@@ -107,24 +105,26 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
-
 @bp_auth.route('/schedule_a_lesson', methods=['GET'])
 @login_required
 def schedule_a_lesson():
+
     return render_template("schedule_a_lesson.html")
+
 
 
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
+
     return render_template("lessons.html")
 
 
 @bp_auth.route('/wallet', methods=['GET'])
 @login_required
 def wallet():
-    return render_template("wallet.html")
 
+    return render_template("wallet.html")
 
 @bp_auth.route('/logout')
 @login_required
