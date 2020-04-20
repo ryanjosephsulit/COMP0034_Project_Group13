@@ -25,7 +25,7 @@ def create_app(config_class=DevConfig):
     """
     app = Flask(__name__)
 
-    # Configure app wth the settings from config.py
+    # Configure langbridge wth the settings from config.py
     app.config.from_object(config_class)
 
     # Initialise plugins
@@ -33,7 +33,7 @@ def create_app(config_class=DevConfig):
     login_manager.init_app(app)
 
     from populate_db import populate_db
-    from app.models import Teacher, Student, Course, Grade
+    from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
     with app.app_context():
         db.create_all()
         populate_db()
@@ -43,10 +43,10 @@ def create_app(config_class=DevConfig):
     app.register_error_handler(500, internal_server_error)
 
     # Register Blueprints
-    from app.main.routes import bp_main
+    from langbridge.main.routes import bp_main
     app.register_blueprint(bp_main)
 
-    from app.auth.routes import bp_auth
+    from langbridge.auth.routes import bp_auth
     app.register_blueprint(bp_auth)
 
     return app

@@ -5,14 +5,14 @@ from flask import render_template, Blueprint, request, flash, redirect, url_for,
 from flask_login import login_user, login_required, logout_user
 from sqlalchemy.exc import IntegrityError
 
-from app import db, login_manager
-from app.auth.forms import SignupForm, LoginForm
-from app.models import Student, Teacher, User
+from langbridge import db, login_manager
+from langbridge.auth.forms import SignupForm, LoginForm
+from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 from sqlalchemy import or_
 from sqlalchemy.orm import with_polymorphic
 
-from app import db
+from langbridge import db
 
 bp_auth = Blueprint('auth', __name__)
 
@@ -35,12 +35,11 @@ def get_safe_redirect():
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(id):
     """Check if user is logged-in on every page load."""
-    if user_id is not None:
-        return User.query.get(user_id)
+    if id is not None:
+        return User.query.get(id)
     return None
-
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -48,16 +47,14 @@ def unauthorized():
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
 
-
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
-        if form.role.data == "student":
-            user = Student(name=form.name.data, email=form.email.data, student_ref=form.uni_id.data)
+        if form.role.data == "learner":
+            user = User(name=form.name.data, email=form.email.data, lang_id=form.language.data)
         else:
-            user = Teacher(name=form.name.data, title=form.title.data, teacher_ref=form.uni_id.data,
-                           email=form.email.data)
+            user = Teacher(name=form.name.data, title=form.title.data, email=form.email.data, lang_id=form.language.data)
         user.set_password(form.password.data)
         try:
             db.session.add(user)
@@ -97,12 +94,12 @@ def search():
         if term == "":
             flash("Enter a name to search for")
             return redirect('/')
-        users = with_polymorphic(User, [Student, Teacher])
+        users = with_polymorphic(User, [Teacher])
         results = db.session.query(users).filter(
-            or_(users.Student.name.contains(term), users.Teacher.name.contains(term))).all()
+            or_(users.name.contains(term), users.Teacher.name.contains(term))).all()
         # results = Student.query.filter(Student.email.contains(term)).all()
         if not results:
-            flash("No students found with that name.")
+            flash("No users found with that name.")
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
@@ -128,8 +125,6 @@ def lessons():
 def wallet():
 
     return render_template("wallet.html")
-
-
 
 @bp_auth.route('/logout')
 @login_required
