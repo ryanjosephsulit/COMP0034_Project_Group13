@@ -48,7 +48,7 @@ class BankAccount(db.Model):
     __tablename__ = 'bank_account'
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     payment_type = db.Column(db.String(250), nullable=False)
-    payment_details = db.Column(db.String(250), nullable=False)
+    credit_card_num = db.Column(db.Integer)
     users = db.relationship('User', backref='bankAccounts')
 
     def __repr__(self):
