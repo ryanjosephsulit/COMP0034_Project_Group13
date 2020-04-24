@@ -1,7 +1,9 @@
+import random
 from datetime import datetime
 
 from flask import render_template, Blueprint, request, flash, redirect, url_for, make_response
 from sqlalchemy import or_
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import with_polymorphic
 from langbridge.auth.forms import SignupForm, LoginForm
 from langbridge import db
@@ -24,6 +26,14 @@ def index(name=""):
         user.set_password(form.password.data)
         try:
             db.session.add(user)
+            db.session.commit()
+            user = User.query.filter_by(email=form.email.data).first()
+            wallet = Wallet()
+            wallet.balance = 0
+            # Generate random number for wallet
+            wallet.wallet_id = random.randint(78624, 8123981242)
+            wallet.id = user.id
+            db.session.add(wallet)
             db.session.commit()
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie("name", form.name.data)
