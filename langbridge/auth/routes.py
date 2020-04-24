@@ -42,13 +42,11 @@ def load_user(id):
         return User.query.get(id)
     return None
 
-
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
-
 
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
@@ -85,9 +83,7 @@ def signup():
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate():
-        print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -109,15 +105,15 @@ def search():
             flash("Enter a name to search for")
             return redirect('/')
         users = with_polymorphic(User, [Teacher])
-        results = db.session.query(Teacher).filter(Teacher.name.contains(term)).all()
+        results = db.session.query(users).filter(
+            or_(users.name.contains(term), users.Teacher.name.contains(term))).all()
         # results = Student.query.filter(Student.email.contains(term)).all()
         if not results:
-            flash("No teachers found with that name.")
+            flash("No users found with that name.")
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
         return redirect(url_for('main.index'))
-
 
 @bp_auth.route('/schedule_a_lesson', methods=['GET'])
 @login_required
