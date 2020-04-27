@@ -104,11 +104,10 @@ def search():
             flash("Enter a name to search for")
             return redirect('/')
         users = with_polymorphic(User, [Teacher])
-        results = db.session.query(users).filter(
-            or_(users.name.contains(term), users.Teacher.name.contains(term))).all()
+        results = db.session.query(Teacher).filter(Teacher.name.contains(term)).all()
         # results = Student.query.filter(Student.email.contains(term)).all()
         if not results:
-            flash("No users found with that name.")
+            flash("No teachers found with that name.")
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
