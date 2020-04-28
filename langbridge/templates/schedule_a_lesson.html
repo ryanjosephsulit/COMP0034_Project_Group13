@@ -1,6 +1,35 @@
 {% extends "base.html" %}
-{% block title %} Signup {% endblock %}
+
+{% block title %} Schedule {% endblock %}
+
 {% block content %}
+
     <h1>Schedule a Lesson Page{{ name }}</h1>
-    <h5>List of teachers, display teacher profile (with their details and reviews), request lesson function</h5>
+    <form>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">An email confirmation will be sent here.</small>
+      </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select Language and Teacher</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option>Mandarin - Lewis Baird</option>
+              <option>Mandarin - Aleyna Bonilla</option>
+              <option>English - Elif Munro</option>
+            </select>
+        </div>
+        <div class="form-group row">
+          <label for="example-date-input" class="col-2 col-form-label">Date</label>
+          <div class="col-10">
+            <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+          </div>
+        </div>
+        <div class="form-group">
+           <label for="exampleTextarea">Message</label>
+           <textarea class="form-control" id="exampleTextarea"  rows="3"> Any other information? </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock %}
+
