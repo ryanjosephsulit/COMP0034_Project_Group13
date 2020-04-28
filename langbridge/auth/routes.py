@@ -113,7 +113,7 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
-@bp_auth.route('/schedule_a_lesson', methods=['GET'])
+@bp_auth.route('/schedule_a_lesson', methods=['GET', 'POST'])
 @login_required
 def schedule_a_lesson():
 
