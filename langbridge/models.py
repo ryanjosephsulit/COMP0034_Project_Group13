@@ -46,13 +46,14 @@ class Teacher(User):
 
 class BankAccount(db.Model):
     __tablename__ = 'bank_account'
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    card_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('user.id'))
     payment_type = db.Column(db.String(250), nullable=False)
     credit_card_num = db.Column(db.Integer)
     users = db.relationship('User', backref='bankAccounts')
 
     def __repr__(self):
-        return f"Forecast('{self.forecast}', '{self.comment}')"
+        return f"Forecast('{self.payment_type}', '{self.credit_card_num}')"
 
 
 class Wallet(db.Model):
