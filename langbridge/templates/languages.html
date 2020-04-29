@@ -1,26 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Language{% endblock %}
 {% block content %}
-{% if language|length %}
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th scope="col">Language Name</th>
-        <th scope="col">Teacher Name</th>
-        <th scope="col">Link to Profile</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for lang in language %}
-    <tr>
-        <td>{{ lang.name }}</td>
-        <td>{{ lang.user_name }}</td>
-        <td>{{ lang.email }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>Sorry, no courses are available at this time. </p>
-{% endif %}
+
+
+    {% if language|length %}
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Language</th>
+                <th scope="col">Teacher</th>
+                <th scope="col">Link to Profile</th>
+                <th scope="col">Rating</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for lang in language %}
+                <tr>
+                    <td>{{ lang.name }}</td>
+                    <td>{{ lang.user_name }}</td>
+                    <td>{{ lang.email }}</td>
+                    <td>{{ lang.rating }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Sorry, no courses are available at this time. </p>
+    {% endif %}
 {% endblock %}

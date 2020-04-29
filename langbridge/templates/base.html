@@ -42,6 +42,9 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.lessons') }}">Lessons</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.advanced_search') }}">Advanced Search</a>
+        </li>
         {% if current_user.is_anonymous %}
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>

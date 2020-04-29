@@ -87,7 +87,7 @@ def login():
     if request.method == 'POST' and form.validate():
         print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.email, user.password)
+
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -119,13 +119,18 @@ def search():
         return redirect(url_for('main.index'))
 
 
-@bp_auth.route('/schedule_a_lesson', methods=['GET'])
+@bp_auth.route('/schedule_a_lesson', methods=['POST','GET'])
 @login_required
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
 
+@bp_auth.route('/advanced_search', methods=['GET'])
+@login_required
+def advanced_search():
 
-@bp_auth.route('/lessons', methods=['GET'])
+    return render_template("advanced_search.html")
+
+@bp_auth.route('/advanced_search', methods=['GET'])
 @login_required
 def lessons():
     return render_template("lessons.html")
