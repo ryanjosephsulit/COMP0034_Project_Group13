@@ -1,26 +1,35 @@
-{% extends "base.html" %}
-{% block title %}Search results{% endblock %}
-{% block content %}
-{% if results|length %}
-{# Variable is not empty #}
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
+{% extends "base.html" %}
+{% block title %}Search results{% endblock %}
+{% block content %}
+{% if results|length %}
+{# Variable is not empty #}
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
         <th scope="col">User name</th>
         <th scope="col">Email</th>
+        <th scope="col">Rating</th>
     </tr>
     </thead>
-    <tbody> {% for result in results %}
-    <tr>
+    <tbody> {% for result in results %}
+    <tr>
         <td>{{ result.name }}</td>
         <td>{{ result.email }}</td>
+        <td>{{ result.rating }}</td>
 
     </tr>
-     {% endfor %}
+     {% endfor %}
     </tbody>
-</table>
-{% else %}
-{# Variable is empty #}
-<p>Sorry, no students found</p>
-{% endif %}
+</table>
+{% else %}
+{# Variable is empty #}
+<p>Sorry, no students found</p>
+{% endif %}
+
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star"></span>
+<span class="fa fa-star"></span>
+
 {% endblock %}
