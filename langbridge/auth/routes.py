@@ -125,8 +125,7 @@ def schedule_a_lesson():
 def lessons():
     return render_template("lessons.html")
 
-
-@bp_auth.route('/payment_details', methods=['GET', 'POST'])
+@bp_auth.route('/payment_details', methods=['GET'])
 @login_required
 def payment_details():
     if request.method == "GET":

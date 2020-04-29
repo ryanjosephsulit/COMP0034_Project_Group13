@@ -43,6 +43,7 @@ def index(name=""):
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie("name", form.name.data)
             return response
+
         except IntegrityError:
             db.session.rollback()
             flash('ERROR! Unable to register {}. Please check your details are correct and resubmit'.format(
