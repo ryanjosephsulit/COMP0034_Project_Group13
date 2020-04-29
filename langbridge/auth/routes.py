@@ -124,7 +124,6 @@ def advanced_search():
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
 
-
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
