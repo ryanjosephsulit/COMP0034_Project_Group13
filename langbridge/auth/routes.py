@@ -145,22 +145,29 @@ def payment_details():
         expyr = int(form.get('expiry_year'))
         expmnth = int(form.get('expiry_month'))
         cvvlength = len(str(form.get('CVV')))
-        if ((expyr == 20 and expmnth > 4) or (20 < expyr < 41)) \
-                and ((cardnum == 19 and cvvlength == 3 and (
-                cardtype == 'visa' or cardtype == 'master-card' or cardtype == 'discover' or cardtype == 'jcb')) or (cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (cvvlength == 3 and cardtype == 'diners')):
-            bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
-            bankaccount.id = user.id
-            bankaccount.card_id = random.randint(45678, 9876543456)
-            db.session.add(bankaccount)
-            db.session.commit()
-            return redirect("/wallet")
-        elif expyr > 40 or expyr < 20:
-            flash('Please submit a valid expiry year (between 2020 and 2040).')
+        name = str(form.get('card_name'))
+        allowed_characters= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ', "'"]
+        if any(x not in allowed_characters for x in name):
+            flash('Please input a valid name.')
             return redirect("/payment_details")
         else:
-            flash('Please submit a valid card number, CVV and expiry date.')
-            return redirect("/payment_details")
-
+            if ((expyr == 20 and expmnth > 4) or (20 < expyr < 41)) \
+                    and ((cardnum == 19 and cvvlength == 3 and (
+                    cardtype == 'visa' or cardtype == 'master-card' or cardtype == 'discover' or cardtype == 'jcb')) or (
+                                 cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (
+                                 cvvlength == 3 and cardtype == 'diners')):
+                bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
+                bankaccount.id = user.id
+                bankaccount.card_id = random.randint(45678, 9876543456)
+                db.session.add(bankaccount)
+                db.session.commit()
+                return redirect("/wallet")
+            elif expyr > 40 or expyr < 20:
+                flash('Please input a valid expiry year (between 2020 and 2040).')
+                return redirect("/payment_details")
+            else:
+                flash('One or more of the card details given were incorrect. Please check your details and try again.')
+                return redirect("/payment_details")
 
 @bp_auth.route('/wallet', methods=['GET', 'POST'])
 @login_required
