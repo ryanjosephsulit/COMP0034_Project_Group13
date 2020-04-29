@@ -114,8 +114,12 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
+@bp_auth.route('/advanced_search', methods=['GET'])
+@login_required
+def advanced_search():
+    return render_template("advanced_search.html")
 
-@bp_auth.route('/schedule_a_lesson', methods=['POST','GET'])
+@bp_auth.route('/schedule_a_lesson', methods=['GET'])
 @login_required
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
