@@ -30,6 +30,11 @@ def index(name=""):
             user = User.query.filter_by(email=form.email.data).first()
             wallet = Wallet()
             wallet.balance = 0
+            # Generate random number for card
+            BankAccount.card_id = random.randint(78624, 8123981242)
+            BankAccount.id = user.id
+            db.session.add(BankAccount)
+            db.session.commit()
             # Generate random number for wallet
             wallet.wallet_id = random.randint(78624, 8123981242)
             wallet.id = user.id
@@ -38,6 +43,7 @@ def index(name=""):
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie("name", form.name.data)
             return response
+
         except IntegrityError:
             db.session.rollback()
             flash('ERROR! Unable to register {}. Please check your details are correct and resubmit'.format(
