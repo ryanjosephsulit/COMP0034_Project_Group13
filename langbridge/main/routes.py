@@ -55,13 +55,14 @@ def index(name=""):
 @bp_main.route('/languages', methods=['GET'])
 def language():
     languages = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
-                                                           Teacher.name.label('user_name'), Teacher.email).order_by(
+                                                           Teacher.name.label('user_name'), Teacher.email, Teacher.rating).order_by(
         Language.lang_id).all()
     print("HERE")
     # Simple test to see if languages is populated
     print(languages)
 
     return render_template("languages.html", language=languages)
+
 
 
 @bp_main.route('/delete_cookie')
