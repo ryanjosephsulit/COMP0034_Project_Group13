@@ -3,6 +3,7 @@ from urllib.parse import urlparse, urljoin
 import random
 from flask import render_template, Blueprint, request, flash, redirect, url_for, make_response, abort
 from flask_login import login_user, login_required, logout_user, current_user
+from flask_wtf import form
 from sqlalchemy.exc import IntegrityError
 
 from langbridge import db, login_manager
@@ -41,11 +42,13 @@ def load_user(id):
         return User.query.get(id)
     return None
 
+
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
+
 
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
@@ -82,7 +85,9 @@ def signup():
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate():
+        print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
+        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -114,49 +119,77 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
+
 @bp_auth.route('/schedule_a_lesson', methods=['GET'])
 @login_required
 def schedule_a_lesson():
-
     return render_template("schedule_a_lesson.html")
-
 
 
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
-
     return render_template("lessons.html")
 
-@bp_auth.route('/payment_details', methods=['GET'])
+
+@bp_auth.route('/payment_details', methods=['GET', 'POST'])
 @login_required
 def payment_details():
-    return render_template("payment_details.html")
+    if request.method == "GET":
+        return render_template("payment_details.html")
+    elif request.method == "POST":
+        form = request.form
+        print(form)
+        user = User.query.filter_by(email=current_user.email).first()
+        cardnum = len(str(form.get('card_number')))
+        cardtype = str(form.get('card_type'))
+        expyr = int(form.get('expiry_year'))
+        expmnth = int(form.get('expiry_month'))
+        cvvlength = len(str(form.get('CVV')))
+        if ((expyr == 20 and expmnth > 4) or (20 < expyr < 41)) \
+                and ((cardnum == 19 and cvvlength == 3 and (
+                cardtype == 'visa' or cardtype == 'master-card' or cardtype == 'discover' or cardtype == 'jcb')) or (cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (cvvlength == 3 and cardtype == 'diners')):
+            bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
+            bankaccount.id = user.id
+            bankaccount.card_id = random.randint(45678, 9876543456)
+            db.session.add(bankaccount)
+            db.session.commit()
+            return redirect("/wallet")
+        elif expyr > 40 or expyr < 20:
+            flash('Please submit a valid expiry year (between 2020 and 2040).')
+            return redirect("/payment_details")
+        else:
+            flash('Please submit a valid card number, CVV and expiry date.')
+            return redirect("/payment_details")
+
 
 @bp_auth.route('/wallet', methods=['GET', 'POST'])
 @login_required
 def wallet():
     user = User.query.filter_by(email=current_user.email).first()
     wallet = Wallet.query.join(User).filter(User.email == user.email).first()
+    bankaccounts = BankAccount.query.join(User).filter(User.email == user.email).all()
+    print(user, wallet.balance, bankaccounts)
     if request.method == "GET":
-        return render_template("wallet.html", wallet_balance=wallet.balance)
+        return render_template("wallet.html", wallet_balance=wallet.balance, bankaccounts=bankaccounts)
     elif request.method == "POST":
         form = request.form
 
         if "buyamount" in form:
             amount = float(form.get('buyamount'))
-            wallet.balance = round(amount+wallet.balance,2)
-           # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
+            wallet.balance = round(amount + wallet.balance, 2)
+        # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
 
         else:
             amount = float(form.get('sellamount'))
             if wallet.balance - amount >= 0:
-                wallet.balance = round(wallet.balance-amount,2)
+                wallet.balance = round(wallet.balance - amount, 2)
             else:
                 flash('Error: You cannot sell more LangCoins than what is in your balance.')
         db.session.add(wallet)
         db.session.commit()
-        return render_template("wallet.html", wallet_balance=wallet.balance)
+        return render_template("wallet.html", wallet_balance=wallet.balance, bankaccounts=bankaccounts)
+
 
 @bp_auth.route('/logout')
 @login_required
