@@ -132,7 +132,12 @@ def results():
         if language == "":
             flash("Choose a language to search for")
             return redirect('/')
-        results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
+        users = with_polymorphic(User, [Teacher])
+        #results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
+        results = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
+                                                   Teacher.name.label('user_name'), Teacher.email,
+                                                   Teacher.rating).order_by(
+            Language.lang_id).filter(Language.name.contains(language)).all()
         print("Works2!")
         print(results)
         if not results:
