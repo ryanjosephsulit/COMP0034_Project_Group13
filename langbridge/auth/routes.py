@@ -6,8 +6,8 @@ from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf import form
 from sqlalchemy.exc import IntegrityError
 
-from langbridge import db, login_manager
-from langbridge.auth.forms import SignupForm, LoginForm
+from langbridge import login_manager
+from langbridge.auth.forms import SignupForm, LoginForm, SearchForm
 from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 from sqlalchemy import or_
@@ -80,6 +80,10 @@ def signup():
                 form.email.data), 'error')
     return render_template('signup.html', form=form)
 
+@bp_auth.route('/advanced_search/', methods=['GET'])
+@login_required
+def advanced_search():
+    return render_template("advanced_search.html")
 
 @bp_auth.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -118,10 +122,24 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
-@bp_auth.route('/advanced_search', methods=['GET'])
+
+@bp_auth.route('/advanced_search/results', methods=['POST','GET'])
 @login_required
-def advanced_search():
-    return render_template("advanced_search.html")
+def results():
+    if request.method == 'POST':
+        print("Works!")
+        language = request.form['language_choice']
+        if term == "":
+            flash("Choose a language to search for")
+            return redirect('/')
+        results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language))
+        print("Works2!")
+        if not results:
+            flash("No teachers found for that language.")
+            return redirect('/')
+        return render_template("searchresults_language.html", results=results)
+    else:
+        return redirect(url_for('main.index'))
 
 @bp_auth.route('/schedule_a_lesson', methods=['GET'])
 @login_required
