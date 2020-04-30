@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Advanced Search{% endblock %}
+{% block content %}
+
+    <h3>Choose a language: </h3>
+    <br>
+    <form action="results" method="post">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-4" align="center" class="form-check">
+                    <img src="../static/img/flags/spain-flag-button-square-medium.png" alt="Spain" height="200"
+                         width="200">
+                    <br><br>
+
+                    <input class="form-check-input" type="radio" placeholder="Language1" aria-label="Language Choice"
+                           name="language_choice" id="Spanish" value="Spanish">
+                    <label class="form-check-label" for="Spanish">Spanish</label>
+
+                    </input>
+                </div>
+                <div class="col-md-4" align="center" class="form-check">
+                    <img src="../static/img/flags/united-kingdom-flag-button-square-medium.png" alt="UK" height="200"
+                         width="200">
+                    <br><br>
+
+                    <input class="form-check-input" type="radio" placeholder="Language2" aria-label="Language Choice"
+                           name="language_choice" id="English" value="English">
+                    <label class="form-check-label" for="English">English</label>
+
+                    </input>
+                </div>
+                <div class="col-md-4" align="center" class="form-check">
+                    <img src="../static/img/flags/china-flag-button-square-medium.png" alt="China" height="200"
+                         width="200">
+                    <br><br>
+
+                    <input class="form-check-input" type="radio" placeholder="Language3" aria-label="Language Choice"
+                           name="language_choice" id="Mandarin" value="Mandarin">
+                    <label class="form-check-label" for="Mandarin">Mandarin</label>
+
+                    </input>
+                </div>
+                <br>
+            </div>
+            <div class="row">
+                <div class="col-md-12" align=center>
+                    <br>
+                    <button class="btn btn-primary btn-outline-light" type="submit" value="Submit">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h5>Or see all available teachers: </h5>
+<div class="container-fluid" align="center">
+<form action="languages" method="post">
+    <button class="btn btn-secondary btn-outline-light" type="submit" value="Submit">See all teachers</button>
+</form>
+
+</div>
+
+
+{% endblock %}
