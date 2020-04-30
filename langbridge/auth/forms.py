@@ -31,3 +31,6 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
+
+class SearchForm(FlaskForm):
+    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])

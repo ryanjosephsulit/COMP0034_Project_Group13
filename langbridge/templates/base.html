@@ -11,13 +11,6 @@
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <!-- Add icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-    .checked {
-      color: orange;
-    }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand bg-danger navbar-dark">
@@ -32,25 +25,29 @@
             <a class="nav-link" href="{{ url_for('auth.signup') }}">My Account</a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.language') }}">Language</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.wallet') }}">Wallet</a>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.schedule_a_lesson') }}">Schedule a Lesson</a>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.lessons') }}">Lessons</a>
-        </li>
         {% if current_user.is_anonymous %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>
-        </li>
-        
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>
+            </li>
+
         {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.advanced_search') }}">Find a teacher</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.wallet') }}">Wallet</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.schedule_a_lesson') }}">Schedule a Lesson</a>
+                <!--
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.lessons') }}">Lessons</a>
+            </li>
+            -->
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+            </li>
+
         {% endif %}
     </ul>
     <form class="form-inline ml-auto" action="search" method="post">
@@ -63,17 +60,17 @@
 <div role=main class="container">
     {# Displays flashed messages on a page #}
     {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="alert-warning list-unstyled">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        {% if messages %}
+            <ul class="alert-warning list-unstyled">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endwith %}
 
     {% block content %}
-    {# Child pages add page specific content here #}
+        {# Child pages add page specific content here #}
     {% endblock %}
 </div>
 </body>

@@ -3,11 +3,10 @@ from urllib.parse import urlparse, urljoin
 import random
 from flask import render_template, Blueprint, request, flash, redirect, url_for, make_response, abort
 from flask_login import login_user, login_required, logout_user, current_user
-from flask_wtf import form
 from sqlalchemy.exc import IntegrityError
 
 from langbridge import db, login_manager
-from langbridge.auth.forms import SignupForm, LoginForm
+from langbridge.auth.forms import SignupForm, LoginForm, SearchForm
 from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 from sqlalchemy import or_
@@ -83,7 +82,9 @@ def signup():
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate():
+        print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
+        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -114,18 +115,60 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
-@bp_auth.route('/schedule_a_lesson', methods=['GET'])
+@bp_auth.route('/advanced_search/results', methods=['POST','GET'])
+@login_required
+def results():
+    if request.method == 'POST':
+        print("Works!")
+        language = request.form['language_choice']
+        if language == "":
+            flash("Choose a language to search for")
+            return redirect('/')
+        users = with_polymorphic(User, [Teacher])
+        #results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
+        results = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
+                                                   Teacher.name.label('user_name'), Teacher.email,
+                                                   Teacher.rating).order_by(
+            Language.lang_id).filter(Language.name.contains(language)).all()
+        print("Works2!")
+        print(results)
+        if not results:
+            flash("No teachers found for that language.")
+            return redirect('/')
+        return render_template("searchresults_language.html", results=results)
+    else:
+        return redirect(url_for('main.index'))
+
+@bp_auth.route('/advanced_search/languages', methods=['POST'])
+@login_required
+def language():
+    if request.method == 'POST':
+        languages = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
+                                                               Teacher.name.label('user_name'), Teacher.email, Teacher.rating).order_by(
+            Language.lang_id).all()
+        print("HERE")
+        # Simple test to see if languages is populated
+        print(languages)
+        return render_template("languages.html", language=languages)
+    else:
+        return render_template("advanced_search.html")
+
+@bp_auth.route('/advanced_search/', methods=['GET'])
+@login_required
+def advanced_search():
+    return render_template("advanced_search.html")
+
+@bp_auth.route('/schedule_a_lesson', methods=['GET', 'POST'])
 @login_required
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
-
 
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
     return render_template("lessons.html")
 
-@bp_auth.route('/payment_details', methods=['GET'])
+@bp_auth.route('/payment_details', methods=['GET', 'POST'])
 @login_required
 def payment_details():
     if request.method == "GET":
@@ -177,18 +220,19 @@ def wallet():
 
         if "buyamount" in form:
             amount = float(form.get('buyamount'))
-            wallet.balance = round(amount + wallet.balance, 2)
-        # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
+            wallet.balance = round(amount+wallet.balance,2)
+           # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
 
         else:
             amount = float(form.get('sellamount'))
             if wallet.balance - amount >= 0:
-                wallet.balance = round(wallet.balance - amount, 2)
+                wallet.balance = round(wallet.balance-amount,2)
             else:
                 flash('Error: You cannot sell more LangCoins than what is in your balance.')
         db.session.add(wallet)
         db.session.commit()
         return render_template("wallet.html", wallet_balance=wallet.balance, bankaccounts=bankaccounts)
+
 
 
 @bp_auth.route('/logout')
