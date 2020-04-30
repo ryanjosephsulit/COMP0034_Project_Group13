@@ -36,7 +36,6 @@ def index(name=""):
             db.session.add(BankAccount)
             db.session.commit()
             # Generate random number for wallet
-            wallet.wallet_id = random.randint(78624, 8123981242)
             wallet.id = user.id
             db.session.add(wallet)
             db.session.commit()

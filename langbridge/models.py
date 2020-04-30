@@ -58,8 +58,7 @@ class BankAccount(db.Model):
 
 class Wallet(db.Model):
     __tablename__ = 'wallet'
-    wallet_id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     balance = db.Column(db.Integer)
     users = db.relationship('User', backref='wallets')
 
