@@ -125,11 +125,12 @@ def results():
     if request.method == 'POST':
         print("Works!")
         language = request.form['language_choice']
-        if term == "":
+        if language == "":
             flash("Choose a language to search for")
             return redirect('/')
-        results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language))
+        results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
         print("Works2!")
+        print(results)
         if not results:
             flash("No teachers found for that language.")
             return redirect('/')
