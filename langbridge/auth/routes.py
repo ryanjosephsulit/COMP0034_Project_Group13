@@ -42,13 +42,11 @@ def load_user(id):
         return User.query.get(id)
     return None
 
-
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
-
 
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
@@ -89,9 +87,7 @@ def advanced_search():
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate():
-        print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -113,10 +109,11 @@ def search():
             flash("Enter a name to search for")
             return redirect('/')
         users = with_polymorphic(User, [Teacher])
-        results = db.session.query(Teacher).filter(Teacher.name.contains(term)).all()
+        results = db.session.query(users).filter(
+            or_(users.name.contains(term), users.Teacher.name.contains(term))).all()
         # results = Student.query.filter(Student.email.contains(term)).all()
         if not results:
-            flash("No teachers found with that name.")
+            flash("No users found with that name.")
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
@@ -152,12 +149,13 @@ def results():
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
 
+
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
     return render_template("lessons.html")
 
-@bp_auth.route('/payment_details', methods=['GET', 'POST'])
+@bp_auth.route('/payment_details', methods=['GET'])
 @login_required
 def payment_details():
     if request.method == "GET":
@@ -171,22 +169,29 @@ def payment_details():
         expyr = int(form.get('expiry_year'))
         expmnth = int(form.get('expiry_month'))
         cvvlength = len(str(form.get('CVV')))
-        if ((expyr == 20 and expmnth > 4) or (20 < expyr < 41)) \
-                and ((cardnum == 19 and cvvlength == 3 and (
-                cardtype == 'visa' or cardtype == 'master-card' or cardtype == 'discover' or cardtype == 'jcb')) or (cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (cvvlength == 3 and cardtype == 'diners')):
-            bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
-            bankaccount.id = user.id
-            bankaccount.card_id = random.randint(45678, 9876543456)
-            db.session.add(bankaccount)
-            db.session.commit()
-            return redirect("/wallet")
-        elif expyr > 40 or expyr < 20:
-            flash('Please submit a valid expiry year (between 2020 and 2040).')
+        name = str(form.get('card_name'))
+        allowed_characters= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ', "'"]
+        if any(x not in allowed_characters for x in name):
+            flash('Please input a valid name.')
             return redirect("/payment_details")
         else:
-            flash('Please submit a valid card number, CVV and expiry date.')
-            return redirect("/payment_details")
-
+            if ((expyr == 20 and expmnth > 4) or (20 < expyr < 41)) \
+                    and ((cardnum == 19 and cvvlength == 3 and (
+                    cardtype == 'visa' or cardtype == 'master-card' or cardtype == 'discover' or cardtype == 'jcb')) or (
+                                 cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (
+                                 cvvlength == 3 and cardtype == 'diners')):
+                bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
+                bankaccount.id = user.id
+                bankaccount.card_id = random.randint(45678, 9876543456)
+                db.session.add(bankaccount)
+                db.session.commit()
+                return redirect("/wallet")
+            elif expyr > 40 or expyr < 20:
+                flash('Please input a valid expiry year (between 2020 and 2040).')
+                return redirect("/payment_details")
+            else:
+                flash('One or more of the card details given were incorrect. Please check your details and try again.')
+                return redirect("/payment_details")
 
 @bp_auth.route('/wallet', methods=['GET', 'POST'])
 @login_required
