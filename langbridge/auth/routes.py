@@ -257,16 +257,21 @@ def logout():
 @bp_auth.route('/user/<nickname>/', methods=['GET'])
 @login_required
 def user(nickname):
+    print(current_user.id)
     results = Language.query.join(User).with_entities(Language.lang_id, Language.name,
-                                                      User.name.label('user_name'), User.email).filter_by(
+                                                      User.name.label('user_name'), User.email, User.id).filter_by(
         name=nickname).all()
+    for result in results:
+        name = result.user_name
+        email = result.email
+        language = result.name
+        id = result.id
+        print(id)
     if user == None:
         flash('User %s not found.' % name)
         return redirect(url_for('main.index'))
-
-        print(user_info)
     else:
-        return render_template("user.html", results=results)
+        return render_template("user.html", results=results, name=name, email=email, language=language, id=id)
 
 
 @bp_auth.route('/edit', methods=['GET', 'POST'])
@@ -277,11 +282,13 @@ def edit():
     if request.method == "POST":
         current_user.name = form.name.data
         current_user.email = form.email.data
-        print(current_user.email)
+        current_user.lang_id = form.language.data
+        print(current_user.lang_id)
         db.session.add(current_user)
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('auth.edit'))
     else:
         form.name.data = current_user.name
+        form.email.data = current_user.email
         return render_template('edit.html', form=form, currentuser=currentuser)
