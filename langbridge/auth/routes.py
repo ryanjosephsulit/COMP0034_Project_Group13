@@ -274,11 +274,10 @@ def user(nickname):
 def edit():
     form = EditForm()
     currentuser = current_user.id
-    print(current_user.id)
     if request.method == "POST":
-        print("works")
         current_user.name = form.name.data
-        print(form.name.data)
+        current_user.email = form.email.data
+        print(current_user.email)
         db.session.add(current_user)
         db.session.commit()
         flash('Your changes have been saved.')
