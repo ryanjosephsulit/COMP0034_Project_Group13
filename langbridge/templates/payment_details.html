@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block title %} Payment Details {% endblock %}
+{% block title %} Signup {% endblock %}
 {% block content %}
     <h1>Payment Details{{ name }}</h1>
     <!DOCTYPE html>
 
 <head>
 
-  <script src="../static/js/card.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-    <link href="../static/css/card-js.min.css" rel="stylesheet" type="text/css" />
-  <script src="../static/js/card-js.js"></script>
+  <link href="../static/css/card-js.min.css" rel="stylesheet" type="text/css" />
+  <script src="../static/js/card-js.min.js"></script>
 
   <style type="text/css">
     form button {
@@ -68,7 +68,6 @@
 
 
   		<!-- Card CVV -->
-            <h8> CVV </h8>
   		<input class="cvc form-control"
          		name="CVV"
          		placeholder="CVV"
@@ -108,10 +107,8 @@
     </div>
 </div>
 
-      <br>
-<p><small>Accepted cards: VISA, Mastercard, Discover, JCB, American Express, Diners.</small></p>
 
-<input name="card_type" id="card_type" type="text" hidden>
+<input name="card_type" id="card_type" value="visa" type="text" hidden>
     <!--
       -- Submit button
       --
@@ -119,6 +116,9 @@
       -->
     <div><input type="submit" value="Submit" class="mt-2 btn btn-danger btn-lg"> <a style ="padding-left: 10px" href="/wallet">Cancel</a></div>
 
+
+  </fieldset>
+</form>
 
 <script>
   $(function() {
