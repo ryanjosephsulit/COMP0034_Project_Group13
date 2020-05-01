@@ -5,12 +5,14 @@
 {# Add the content for this page #}
 {% block content %}
     <br>
+    {% if current_user.is_anonymous %}
     <div class="container-fluid" style="background-color: #ed969e">
         <div class="row">
             <div class="col-sm-3 col-md-6" align="center">
                 <img src="../static/img/langbridge_logo.png" alt="LangBridge" height="600"  width="550" >
             </div>
             <div class="col-sm-9 col-md-6">
+                <h3>Sign up here!</h3>
                 <div class="container-fluid" style="background-color: #ed969e">
                     {% from "_formhelpers.html" import render_field %}
                 <form method=post novalidate>
@@ -33,5 +35,9 @@
         </div>
 
     </div>
+    {% else %}
 
+    <h1> Welcome to Langbridge!</h1>
+        <img src="../static/img/langbridge_logo.png" alt="LangBridge" height="400"  width="350" >
+    {% endif %}
 {% endblock %}

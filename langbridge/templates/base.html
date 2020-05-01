@@ -21,16 +21,20 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.signup') }}">My Account</a>
-        </li>
 
         {% if current_user.is_anonymous %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>
             </li>
+                <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
+        </li>
 
         {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.user', nickname=current_user.name) }}">My Account</a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.advanced_search') }}">Find a teacher</a>
             </li>

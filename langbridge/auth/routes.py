@@ -233,11 +233,26 @@ def wallet():
         db.session.commit()
         return render_template("wallet.html", wallet_balance=wallet.balance, bankaccounts=bankaccounts)
 
-
-
 @bp_auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
+
+@bp_auth.route('/<nickname>/', methods=['GET'])
+@login_required
+def user(nickname):
+    print(nickname)
+    results=db.session.query(User).filter(User.name.contains(nickname)).all()
+    print(results)
+    if user==None:
+        flash ('User %s not found.' % name)
+        return redirect(url_for('main.index'))
+    #else:
+        #user_info = Language.query.join(User).with_entities(Language.lang_id, Language.name,
+        #                                           User.name.label('user_name'), User.email,
+        #                                           ).filter(User.name.contains(user)).all()
+        print(user_info)
+
+    return render_template("user.html", results=results)
