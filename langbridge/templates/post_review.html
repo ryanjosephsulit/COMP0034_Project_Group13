@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Post Review{% endblock %}
+{% block content %}
+    <h1> Post Review</h1>
+    <br>
+    <form action="" method="post" name="edit">
+        <h5> Post review here: </h5>
+        {{ form.review }}
+        <br><br>
+        <button class="btn btn-danger btn-outline-light" type="submit" value="Submit">Submit Review</button>
+    </form>
+
+{% endblock %}

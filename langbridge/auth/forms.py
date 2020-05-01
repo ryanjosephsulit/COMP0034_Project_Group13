@@ -39,3 +39,6 @@ class EditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
+    review = StringField('Review', validators=[DataRequired()])
+
+

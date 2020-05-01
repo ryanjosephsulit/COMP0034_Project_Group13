@@ -259,19 +259,20 @@ def logout():
 def user(nickname):
     print(current_user.id)
     results = Language.query.join(User).with_entities(Language.lang_id, Language.name,
-                                                      User.name.label('user_name'), User.email, User.id).filter_by(
-        name=nickname).all()
+                                                      User.name.label('user_name'), User.email, User.id,
+                                                      User.user_type).filter_by(name=nickname).all()
     for result in results:
         name = result.user_name
         email = result.email
         language = result.name
         id = result.id
-        print(id)
+        type = result.user_type
+
     if user == None:
         flash('User %s not found.' % name)
         return redirect(url_for('main.index'))
     else:
-        return render_template("user.html", results=results, name=name, email=email, language=language, id=id)
+        return render_template("user.html", results=results, name=name, email=email, language=language, id=id, type=type)
 
 
 @bp_auth.route('/edit', methods=['GET', 'POST'])
@@ -292,3 +293,20 @@ def edit():
         form.name.data = current_user.name
         form.email.data = current_user.email
         return render_template('edit.html', form=form, currentuser=currentuser)
+
+@bp_auth.route('/post_review', methods=['POST'])
+@login_required
+def post_review():
+    form = EditForm()
+    if request.method == "POST":
+        name = request.form['teacher']
+        name.review = form.review.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('auth.post_review'))
+    else:
+        form.review.data = name.review
+        return render_template('post_review.html', form=form, name=name)
+
+

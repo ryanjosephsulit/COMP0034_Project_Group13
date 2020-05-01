@@ -33,7 +33,7 @@ class Teacher(User):
     teacher_id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)
     title = db.Column(db.Text)
     rating = db.Column(db.Integer, nullable=False)
-    reviews = db.Column(db.String)
+    latest_review = db.Column(db.String)
     users = db.relationship('User', backref='teachers')
 
     __mapper_args__ = {"polymorphic_identity": "teacher"}
