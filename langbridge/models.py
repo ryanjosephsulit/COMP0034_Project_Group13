@@ -28,7 +28,6 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-
 class Teacher(User):
     __tablename__ = 'teacher'
     teacher_id = db.Column(None, db.ForeignKey('user.id'), primary_key=True)

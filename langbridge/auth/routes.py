@@ -244,7 +244,9 @@ def logout():
 @login_required
 def user(nickname):
     print(nickname)
-    results=db.session.query(User).filter(User.name.contains(nickname)).all()
+    results = User.query.join(Language).with_entities(Language.lang_id, Language.name,
+                                                      User.name.label('user_name'), User.email).filter(User.name.contains(nickname)).all()
+#    results=db.session.query(User).filter(User.name.contains(nickname)).all()
     print(results)
     if user==None:
         flash ('User %s not found.' % name)
