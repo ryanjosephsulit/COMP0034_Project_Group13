@@ -12,7 +12,7 @@ class SignupForm(FlaskForm):
     title = SelectField('Title', choices=[('mr', 'Mr'), ('mrs', 'Mrs'), ('dr', 'Dr'), ('prof', 'Prof')])
     name = StringField('Name', validators=[DataRequired()])
     role = SelectField('Role', choices=[('learner', 'Learner'), ('teacher', 'Teacher')])
-    language = SelectField('Language to Learn', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
+    language = SelectField('Language to Learn or Teach', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
     email = StringField('Email Address', validators=[DataRequired(), Email(message='Valid email address required')])
     password = PasswordField('Password',
                              validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
