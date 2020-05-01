@@ -26,11 +26,17 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.about') }}">About Us</a>
+            </li>
                 <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
         </li>
 
         {% else %}
+                        <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.about') }}">About Us</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.user', nickname=current_user.name) }}">My Account</a>
             </li>

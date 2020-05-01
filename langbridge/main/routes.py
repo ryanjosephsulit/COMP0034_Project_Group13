@@ -56,6 +56,9 @@ def language():
 
     return render_template("languages.html", language=languages)
 
+@bp_main.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html")
 
 @bp_main.route('/delete_cookie')
 def delete_cookie():
