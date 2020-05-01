@@ -36,7 +36,6 @@ class Teacher(User):
     reviews = db.Column(db.String)
     users = db.relationship('User', backref='teachers')
 
-
     __mapper_args__ = {"polymorphic_identity": "teacher"}
 
     def __repr__(self):

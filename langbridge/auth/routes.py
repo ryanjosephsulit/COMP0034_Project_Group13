@@ -84,7 +84,7 @@ def login():
     if request.method == 'POST' and form.validate():
         print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.email, user.password)
+#        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -240,21 +240,15 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
 
-@bp_auth.route('/<nickname>/', methods=['GET'])
+@bp_auth.route('/user/<nickname>/', methods=['GET'])
 @login_required
 def user(nickname):
-    print(nickname)
     results = User.query.join(Language).with_entities(Language.lang_id, Language.name,
                                                       User.name.label('user_name'), User.email).filter(User.name.contains(nickname)).all()
-#    results=db.session.query(User).filter(User.name.contains(nickname)).all()
-    print(results)
     if user==None:
         flash ('User %s not found.' % name)
         return redirect(url_for('main.index'))
-    #else:
-        #user_info = Language.query.join(User).with_entities(Language.lang_id, Language.name,
-        #                                           User.name.label('user_name'), User.email,
-        #                                           ).filter(User.name.contains(user)).all()
+
         print(user_info)
 
     return render_template("user.html", results=results)
