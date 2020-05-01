@@ -15,10 +15,15 @@
                     <p>Name: {{ result.user_name }}</p>
                     <p>Email: {{ result.email }}</p>
                     <p>Chosen language of study: {{ result.name }}</p>
+                    {% if result.id == currentuser %}
+                        <p><a href="{{ url_for('auth.edit') }}">Edit</a></p>
+                    {% endif %}
                 {% endfor %}
             </div>
 
         </div>
     </div>
+
+
 
 {% endblock %}

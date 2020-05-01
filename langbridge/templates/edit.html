@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+        <h1> Edit Profile Details</h1>
+    <br>
+    <form action="" method="post" name="edit">
+    <h5> Your new name: </h5>
+        {{ form.name }}
+    <button class="btn btn-secondary btn-outline-light" type="submit" value="Submit">Change details</button>
+    </form>
+
+{% endblock %}

@@ -36,4 +36,6 @@ class SearchForm(FlaskForm):
     language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
 
 class EditForm(FlaskForm):
-    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+#    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])

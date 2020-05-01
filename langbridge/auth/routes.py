@@ -6,7 +6,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.exc import IntegrityError
 
 from langbridge import db, login_manager
-from langbridge.auth.forms import SignupForm, LoginForm, SearchForm
+from langbridge.auth.forms import SignupForm, LoginForm, SearchForm, EditForm
 from langbridge.models import Teacher, User, BankAccount, Wallet, Language, Lesson, LessonReview
 
 from sqlalchemy import or_
@@ -41,11 +41,13 @@ def load_user(id):
         return User.query.get(id)
     return None
 
+
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
+
 
 @bp_auth.route('/signup/', methods=['POST', 'GET'])
 def signup():
@@ -84,7 +86,7 @@ def login():
     if request.method == 'POST' and form.validate():
         print(form.email.data, form.password.data)
         user = User.query.filter_by(email=form.email.data).first()
-#        print(user.email, user.password)
+        #        print(user.email, user.password)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -115,7 +117,8 @@ def search():
     else:
         return redirect(url_for('main.index'))
 
-@bp_auth.route('/advanced_search/results', methods=['POST','GET'])
+
+@bp_auth.route('/advanced_search/results', methods=['POST', 'GET'])
 @login_required
 def results():
     if request.method == 'POST':
@@ -125,10 +128,10 @@ def results():
             flash("Choose a language to search for")
             return redirect('/')
         users = with_polymorphic(User, [Teacher])
-        #results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
+        # results = db.session.query(Teacher, Language).filter(Language.lang_id==Teacher.lang_id).filter(Language.name.contains(language)).all()
         results = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
-                                                   Teacher.name.label('user_name'), Teacher.email,
-                                                   Teacher.rating).order_by(
+                                                             Teacher.name.label('user_name'), Teacher.email,
+                                                             Teacher.rating).order_by(
             Language.lang_id).filter(Language.name.contains(language)).all()
         print("Works2!")
         print(results)
@@ -139,12 +142,14 @@ def results():
     else:
         return redirect(url_for('main.index'))
 
+
 @bp_auth.route('/advanced_search/languages', methods=['POST'])
 @login_required
 def language():
     if request.method == 'POST':
         languages = Language.query.join(Teacher).with_entities(Language.lang_id, Language.name,
-                                                               Teacher.name.label('user_name'), Teacher.email, Teacher.rating).order_by(
+                                                               Teacher.name.label('user_name'), Teacher.email,
+                                                               Teacher.rating).order_by(
             Language.lang_id).all()
         print("HERE")
         # Simple test to see if languages is populated
@@ -153,20 +158,24 @@ def language():
     else:
         return render_template("advanced_search.html")
 
+
 @bp_auth.route('/advanced_search/', methods=['GET'])
 @login_required
 def advanced_search():
     return render_template("advanced_search.html")
+
 
 @bp_auth.route('/schedule_a_lesson', methods=['GET', 'POST'])
 @login_required
 def schedule_a_lesson():
     return render_template("schedule_a_lesson.html")
 
+
 @bp_auth.route('/lessons', methods=['GET'])
 @login_required
 def lessons():
     return render_template("lessons.html")
+
 
 @bp_auth.route('/payment_details', methods=['GET', 'POST'])
 @login_required
@@ -183,7 +192,9 @@ def payment_details():
         expmnth = int(form.get('expiry_month'))
         cvvlength = len(str(form.get('CVV')))
         name = str(form.get('card_name'))
-        allowed_characters= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ', "'"]
+        allowed_characters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                              's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                              'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', "'"]
         if any(x not in allowed_characters for x in name):
             flash('Please input a valid name.')
             return redirect("/payment_details")
@@ -206,6 +217,7 @@ def payment_details():
                 flash('One or more of the card details given were incorrect. Please check your details and try again.')
                 return redirect("/payment_details")
 
+
 @bp_auth.route('/wallet', methods=['GET', 'POST'])
 @login_required
 def wallet():
@@ -220,18 +232,19 @@ def wallet():
 
         if "buyamount" in form:
             amount = float(form.get('buyamount'))
-            wallet.balance = round(amount+wallet.balance,2)
-           # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
+            wallet.balance = round(amount + wallet.balance, 2)
+        # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
 
         else:
             amount = float(form.get('sellamount'))
             if wallet.balance - amount >= 0:
-                wallet.balance = round(wallet.balance-amount,2)
+                wallet.balance = round(wallet.balance - amount, 2)
             else:
                 flash('Error: You cannot sell more LangCoins than what is in your balance.')
         db.session.add(wallet)
         db.session.commit()
         return render_template("wallet.html", wallet_balance=wallet.balance, bankaccounts=bankaccounts)
+
 
 @bp_auth.route('/logout')
 @login_required
@@ -240,15 +253,36 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
 
+
 @bp_auth.route('/user/<nickname>/', methods=['GET'])
 @login_required
 def user(nickname):
-    results = User.query.join(Language).with_entities(Language.lang_id, Language.name,
-                                                      User.name.label('user_name'), User.email).filter(User.name.contains(nickname)).all()
-    if user==None:
-        flash ('User %s not found.' % name)
+    results = Language.query.join(User).with_entities(Language.lang_id, Language.name,
+                                                      User.name.label('user_name'), User.email).filter_by(
+        name=nickname).all()
+    if user == None:
+        flash('User %s not found.' % name)
         return redirect(url_for('main.index'))
 
         print(user_info)
+    else:
+        return render_template("user.html", results=results)
 
-    return render_template("user.html", results=results)
+
+@bp_auth.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit():
+    form = EditForm()
+    currentuser = current_user.id
+    print(current_user.id)
+    if request.method == "POST":
+        print("works")
+        current_user.name = form.name.data
+        print(form.name.data)
+        db.session.add(current_user)
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('auth.edit'))
+    else:
+        form.name.data = current_user.name
+        return render_template('edit.html', form=form, currentuser=currentuser)
