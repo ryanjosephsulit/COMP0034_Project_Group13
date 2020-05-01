@@ -1,7 +1,7 @@
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+
 from langbridge import db
-from datetime import datetime
 
 
 class User(UserMixin, db.Model):
@@ -27,6 +27,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
 
 class Teacher(User):
     __tablename__ = 'teacher'
@@ -72,6 +73,7 @@ class Lesson(db.Model):
     time = db.Column(db.String)
     users = db.relationship('User', backref='lessons')
 
+
 class LessonReview(db.Model):
     __tablename__ = 'lesson_review'
     review_id = db.Column(db.Integer, primary_key=True)
@@ -86,10 +88,3 @@ class Language(db.Model):
     __tablename__ = 'language'
     lang_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-
-#class LanguageUser(db.Model):
-#    _tablename_ = 'language_user'
-#    lang_id = db.Column(db.Integer, db.ForeignKey('language.lang_id'), primary_key=True)
-#    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-#    languages = db.relationship('Language', backref='languageusers')
-#    users = db.relationship('User', backref='languageusers')

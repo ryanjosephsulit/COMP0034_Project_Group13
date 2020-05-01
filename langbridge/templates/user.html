@@ -1,3 +1,5 @@
+{# This page allows users to view a profile. #}
+
 {% extends 'base.html' %}
 
 {% block title %}Profile{% endblock %}
@@ -12,13 +14,13 @@
             </div>
             <div class="col-md-9" align="Left">
                 {% if type == "teacher" %}
-                    <h6> Qualified Langbridge Teacher</h6>
-                 {% else  %}
-                    <h6> Aspiring Langbridge Student</h6>
+                    <h6> Qualified LangBridge Teacher</h6>
+                {% else %}
+                    <h6> Aspiring LangBridge Student</h6>
                 {% endif %}
                 <p>Name: {{ name }}</p>
                 <p>Email: {{ email }}</p>
-                <p>Chosen language : {{ language }}</p>
+                <p>Chosen language to learn : {{ language }}</p>
                 {% for result in results %}
                     {% if result.id == current_user.id %}
                         <p><a href="{{ url_for('auth.edit') }}">Edit</a></p>

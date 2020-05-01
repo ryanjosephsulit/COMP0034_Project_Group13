@@ -12,8 +12,8 @@ class SignupForm(FlaskForm):
     title = SelectField('Title', choices=[('mr', 'Mr'), ('mrs', 'Mrs'), ('dr', 'Dr'), ('prof', 'Prof')])
     name = StringField('Name', validators=[DataRequired()])
     role = SelectField('Role', choices=[('learner', 'Learner'), ('teacher', 'Teacher')])
-    language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
-    email = StringField('Email address', validators=[DataRequired(), Email(message='Valid email address required')])
+    language = SelectField('Language to Learn', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
+    email = StringField('Email Address', validators=[DataRequired(), Email(message='Valid email address required')])
     password = PasswordField('Password',
                              validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Repeat Password')
@@ -32,13 +32,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
 
+
 class SearchForm(FlaskForm):
     language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
+
 
 class EditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     language = SelectField('Language', choices=[('1', 'Mandarin'), ('2', 'English'), ('3', 'Spanish')])
     review = StringField('Review', validators=[DataRequired()])
-
-

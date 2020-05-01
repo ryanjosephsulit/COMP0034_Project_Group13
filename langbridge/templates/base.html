@@ -1,3 +1,5 @@
+{# This page includes the navbar. #}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +31,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('main.about') }}">About Us</a>
             </li>
-                <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
+            </li>
 
         {% else %}
-                        <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('main.about') }}">About Us</a>
             </li>
             <li class="nav-item">
@@ -42,7 +44,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('auth.advanced_search') }}">Find a teacher</a>
+                <a class="nav-link" href="{{ url_for('auth.advanced_search') }}">Find a Teacher</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.wallet') }}">Wallet</a>

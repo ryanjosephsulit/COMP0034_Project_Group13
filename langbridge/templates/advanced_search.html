@@ -1,3 +1,5 @@
+{# This page allows users to search for teachers of a language. #}
+
 {% extends "base.html" %}
 {% block title %}Advanced Search{% endblock %}
 {% block content %}
@@ -53,12 +55,12 @@
     </form>
 
     <h5>Or see all available teachers: </h5>
-<div class="container-fluid" align="center">
-<form action="languages" method="post">
-    <button class="btn btn-secondary btn-outline-light" type="submit" value="Submit">See all teachers</button>
-</form>
+    <div class="container-fluid" align="center">
+        <form action="languages" method="post">
+            <button class="btn btn-secondary btn-outline-light" type="submit" value="Submit">See all teachers</button>
+        </form>
 
-</div>
+    </div>
 
 
 {% endblock %}

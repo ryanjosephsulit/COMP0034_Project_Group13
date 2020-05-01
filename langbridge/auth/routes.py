@@ -186,6 +186,7 @@ def payment_details():
         form = request.form
         print(form)
         user = User.query.filter_by(email=current_user.email).first()
+        # Card details error testing.
         cardnum = len(str(form.get('card_number')))
         cardtype = str(form.get('card_type'))
         expyr = int(form.get('expiry_year'))
@@ -205,6 +206,7 @@ def payment_details():
                                  cardnum == 17 and (cvvlength == 4 and cardtype == 'american-express')) or (
                                  cvvlength == 3 and cardtype == 'diners')):
                 bankaccount = BankAccount(payment_type=form.get('card_type'), credit_card_num=form.get('card_number'))
+                # Generate random number for bank account.
                 bankaccount.id = user.id
                 bankaccount.card_id = random.randint(45678, 9876543456)
                 db.session.add(bankaccount)
@@ -233,7 +235,6 @@ def wallet():
         if "buyamount" in form:
             amount = float(form.get('buyamount'))
             wallet.balance = round(amount + wallet.balance, 2)
-        # wallet.balance = float("{0:.2f}".format(wallet.balance1) change
 
         else:
             amount = float(form.get('sellamount'))
@@ -272,7 +273,8 @@ def user(nickname):
         flash('User %s not found.' % name)
         return redirect(url_for('main.index'))
     else:
-        return render_template("user.html", results=results, name=name, email=email, language=language, id=id, type=type)
+        return render_template("user.html", results=results, name=name, email=email, language=language, id=id,
+                               type=type)
 
 
 @bp_auth.route('/edit', methods=['GET', 'POST'])
@@ -294,6 +296,7 @@ def edit():
         form.email.data = current_user.email
         return render_template('edit.html', form=form, currentuser=currentuser)
 
+
 @bp_auth.route('/post_review', methods=['POST'])
 @login_required
 def post_review():
@@ -308,5 +311,3 @@ def post_review():
     else:
         form.review.data = name.review
         return render_template('post_review.html', form=form, name=name)
-
-

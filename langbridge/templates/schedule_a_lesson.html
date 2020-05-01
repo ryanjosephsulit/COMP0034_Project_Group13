@@ -1,46 +1,56 @@
+{# This page allows users to schedule a lesson with a teacher. #}
+
 {% extends "base.html" %}
-{% block title %} Signup {% endblock %}
+{% block title %} Schedule a Lesson {% endblock %}
 {% block content %}
 
-    <h1>Schedule a Lesson Page{{ name }}</h1>
+    <h1>Schedule a Lesson{{ name }}</h1>
     <form id="contact-form" method="post" action="https://formspree.io/xzbjpayp" role="form">
-      <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-        <small id="emailHelp" class="form-text text-muted">An email confirmation will be sent here.</small>
-      </div>
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Select Language and Teacher</label>
+            <label for="exampleInputEmail1">Email address:</label>
+            <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp"
+                   placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">An email confirmation will be sent here.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select Language and Teacher:</label>
             <select class="form-control" name="languageteacher" id="exampleFormControlSelect1">
-              <option>Mandarin - Lewis Baird</option>
-              <option>Mandarin - Aleyna Bonilla</option>
-              <option>English - Elif Munro</option>
+                <option>Mandarin - Lewis Baird</option>
+                <option>Mandarin - Aleyna Bonilla</option>
+                <option>English - Elif Munro</option>
             </select>
         </div>
         <div class="form-group row">
-          <label for="example-time-input" class="col-2 col-form-label">Time</label>
-          <div class="col-10">
-            <input class="form-control" type="time" value="19:00:00" name="time" id="example-time-input">
-          </div>
+            <label for="example-time-input" class="col-2 col-form-label">Time:</label>
+            <div class="col-10">
+                <input class="form-control" type="time" value="19:00:00" name="time" id="example-time-input">
+            </div>
         </div>
         <div class="form-group row">
-          <label for="example-date-input" class="col-2 col-form-label">Date</label>
-          <div class="col-10">
-            <input class="form-control" type="date" value="2020-06-19" name="date" id="example-date-input">
-          </div>
+            <label for="example-date-input" class="col-2 col-form-label">Date:</label>
+            <div class="col-10">
+                <input class="form-control" type="date" value="2020-06-19" name="date" id="example-date-input">
+            </div>
         </div>
         <div class="form-group">
-           <label for="exampleTextarea">Message</label>
-           <textarea class="form-control" name="message" id="exampleTextarea"  rows="3" placeholder="Any other information?"></textarea>
+            <label for="exampleTextarea">Message:</label>
+            <textarea class="form-control" name="message" id="exampleTextarea" rows="3"
+                      placeholder="Any other information?"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js" integrity="sha256-dHf/YjH1A4tewEsKUSmNnV05DDbfGN3g7NMq86xgGh8=" crossorigin="anonymous"></script>
-        <script src="contact.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"
+            integrity="sha256-dHf/YjH1A4tewEsKUSmNnV05DDbfGN3g7NMq86xgGh8=" crossorigin="anonymous"></script>
+    <script src="contact.js"></script>
 
 {% endblock %}
